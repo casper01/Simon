@@ -18,10 +18,10 @@ define(() ->
             this.displayFromMove(0)
         displayFromMove: (moveNumber) -> 
             level = this
-            this.getButton(this.getMove(moveNumber)).turnOn()
+            this.getButton(moveNumber).turnOn()
             this.propertyChanged()
             setTimeout (->
-                level.getButton(level.getMove(moveNumber)).turnOff()
+                level.getButton(moveNumber).turnOff()
                 level.propertyChanged()
                 
                 if moveNumber != level.getMovesCount() - 1
@@ -32,7 +32,7 @@ define(() ->
                     level.finishedDisplaying()
             ), @_displayTime
             
-        getButton: (i) -> @_simonButtons[i]
+        getButton: (moveNumber) -> @_simonButtons[this.getMove(moveNumber)]
         getMove: (i) -> @_moves[i]
         getMovesCount: -> @_moves.length
 )

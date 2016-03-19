@@ -10,9 +10,12 @@ define(() ->
             @_color = @_activeColor
         turnOff: ->
             @_color = @_inactiveColor
+        isTurnedOn: -> @_color == @_activeColor
         contains: (x, y) ->
             return false if x < @_x or y < @_y
             return false if x > @_x + @_width
             return false if y > @_y + @_width
             return true
+        getHashCode: -> @_activeColor
+        equals: (otherButton) -> this.getHashCode() == otherButton.getHashCode()
 )

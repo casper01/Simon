@@ -2,7 +2,7 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
   var GameController;
   return GameController = (function() {
     function GameController() {
-      var controller, gameManager;
+      var controller;
       this._gameView = new GameView;
       this._gameView.adjustWindow();
       this._gameView.draw();
@@ -17,7 +17,7 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
         return controller.onResize();
       });
       this._enabledClicking = true;
-      gameManager = new GameManager(this._gameView.getObjects(), ((function(_this) {
+      this._gameManager = new GameManager(this._gameView.getObjects(), ((function(_this) {
         return function() {
           return _this.update();
         };
@@ -30,7 +30,7 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
           return _this.EnableClicking();
         };
       })(this));
-      gameManager.start();
+      this._gameManager.start();
     }
 
     GameController.prototype.mouseDown = function(e) {
@@ -53,18 +53,20 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
     };
 
     GameController.prototype.mouseUp = function(e) {
-      var i, len, obj, ref, results;
+      var i, len, obj, ref, turnedOnButton;
       if (!this._enabledClicking) {
         return;
       }
       ref = this._gameView.getObjects();
-      results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         obj = ref[i];
+        if (obj.isTurnedOn()) {
+          turnedOnButton = obj;
+        }
         obj.turnOff();
-        results.push(this.update());
       }
-      return results;
+      this.update();
+      return this._gameManager.buttonClicked(turnedOnButton);
     };
 
     GameController.prototype.onResize = function() {

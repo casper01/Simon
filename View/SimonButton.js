@@ -25,6 +25,10 @@ define(function() {
       return this._color = this._inactiveColor;
     };
 
+    SimonButton.prototype.isTurnedOn = function() {
+      return this._color === this._activeColor;
+    };
+
     SimonButton.prototype.contains = function(x, y) {
       if (x < this._x || y < this._y) {
         return false;
@@ -36,6 +40,14 @@ define(function() {
         return false;
       }
       return true;
+    };
+
+    SimonButton.prototype.getHashCode = function() {
+      return this._activeColor;
+    };
+
+    SimonButton.prototype.equals = function(otherButton) {
+      return this.getHashCode() === otherButton.getHashCode();
     };
 
     return SimonButton;

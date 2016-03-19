@@ -37,10 +37,10 @@ define(function() {
     Level.prototype.displayFromMove = function(moveNumber) {
       var level;
       level = this;
-      this.getButton(this.getMove(moveNumber)).turnOn();
+      this.getButton(moveNumber).turnOn();
       this.propertyChanged();
       return setTimeout((function() {
-        level.getButton(level.getMove(moveNumber)).turnOff();
+        level.getButton(moveNumber).turnOff();
         level.propertyChanged();
         if (moveNumber !== level.getMovesCount() - 1) {
           return setTimeout((function() {
@@ -52,8 +52,8 @@ define(function() {
       }), this._displayTime);
     };
 
-    Level.prototype.getButton = function(i) {
-      return this._simonButtons[i];
+    Level.prototype.getButton = function(moveNumber) {
+      return this._simonButtons[this.getMove(moveNumber)];
     };
 
     Level.prototype.getMove = function(i) {
