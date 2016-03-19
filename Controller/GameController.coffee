@@ -15,7 +15,7 @@ define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, Game
                 controller.onResize()
             )
             @_enabledClicking = true
-            @_gameManager = new GameManager @_gameView.getObjects(), (=>this.update()), (=>this.DisableClicking()), =>this.EnableClicking()
+            @_gameManager = new GameManager @_gameView.getObjects(), (=>this.update()), (=>this.disableClicking()), (=>this.enableClicking()), =>this.drawFailScreen()
             @_gameManager.start()
         mouseDown: (e) ->
             if !@_enabledClicking
@@ -34,14 +34,19 @@ define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, Game
                     turnedOnButton = obj
                 obj.turnOff()
             this.update()
-            @_gameManager.buttonClicked(turnedOnButton)
+            
+            if turnedOnButton != undefined
+                @_gameManager.buttonClicked(turnedOnButton)
         onResize: ->
             @_gameView.adjustWindow()
             this.update()
         update: ->
             @_gameView.draw()
-        EnableClicking: ->
+        enableClicking: ->
             @_enabledClicking = true
-        DisableClicking: ->
+        disableClicking: ->
             @_enabledClicking = false
+        drawFailScreen: ->
+            this.disableClicking()
+            @_gameView.drawFailScreen()
 )

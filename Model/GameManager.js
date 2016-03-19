@@ -1,10 +1,13 @@
 define(["Level"], function(Level) {
   var GameManager;
   return GameManager = (function() {
-    function GameManager(simonButtons, propertyChanged, startedDisplaying, finishedDisplaying) {
+    GameManager.TIMETONEXTROUND = 500;
+
+    function GameManager(simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake) {
       this.propertyChanged = propertyChanged;
       this.startedDisplaying = startedDisplaying;
       this.finishedDisplaying = finishedDisplaying;
+      this.madeMistake = madeMistake;
       this._actualLevel = new Level(simonButtons, 2, 1000, ((function(_this) {
         return function() {
           return _this.propertyChanged();
@@ -28,16 +31,24 @@ define(["Level"], function(Level) {
     };
 
     GameManager.prototype.buttonClicked = function(button) {
+      var gm, waitTime;
       if (button.equals(this._actualLevel.getButton(this._actualMove))) {
         this._actualMove++;
         if (this._actualMove === this._actualLevel.getMovesCount()) {
           button.turnOff();
           this._actualLevel.addMove();
-          return this.start();
+          gm = this;
+          return setTimeout((function() {
+            return gm.start();
+          }), GameManager.TIMETONEXTROUND);
         }
       } else {
         button.turnOff();
-        return this.start();
+        waitTime = this.madeMistake();
+        gm = this;
+        return setTimeout((function() {
+          return gm.start();
+        }), waitTime + GameManager.TIMETONEXTROUND);
       }
     };
 

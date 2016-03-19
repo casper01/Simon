@@ -23,11 +23,15 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
         };
       })(this)), ((function(_this) {
         return function() {
-          return _this.DisableClicking();
+          return _this.disableClicking();
+        };
+      })(this)), ((function(_this) {
+        return function() {
+          return _this.enableClicking();
         };
       })(this)), (function(_this) {
         return function() {
-          return _this.EnableClicking();
+          return _this.drawFailScreen();
         };
       })(this));
       this._gameManager.start();
@@ -66,7 +70,9 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
         obj.turnOff();
       }
       this.update();
-      return this._gameManager.buttonClicked(turnedOnButton);
+      if (turnedOnButton !== void 0) {
+        return this._gameManager.buttonClicked(turnedOnButton);
+      }
     };
 
     GameController.prototype.onResize = function() {
@@ -78,12 +84,17 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       return this._gameView.draw();
     };
 
-    GameController.prototype.EnableClicking = function() {
+    GameController.prototype.enableClicking = function() {
       return this._enabledClicking = true;
     };
 
-    GameController.prototype.DisableClicking = function() {
+    GameController.prototype.disableClicking = function() {
       return this._enabledClicking = false;
+    };
+
+    GameController.prototype.drawFailScreen = function() {
+      this.disableClicking();
+      return this._gameView.drawFailScreen();
     };
 
     return GameController;

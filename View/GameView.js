@@ -6,11 +6,13 @@ define(["View", "SimonButton", "Point", "jQuery"], function(View, SimonButton, P
   return GameView = (function(superClass) {
     extend(GameView, superClass);
 
+    GameView.REDSCREENTIME = 200;
+
     function GameView() {
       GameView.__super__.constructor.call(this);
       this.board = $("#board");
       this.updateSettings();
-      this.buttonColors = [["blue", "#4f77ff"], ["red", "#ff4f4f"], ["green", "#57ff4f"], ["yellow", "#fffd4f"]];
+      this.buttonColors = [["blue", "#4f77ff"], ["red", "#ff9494"], ["green", "#57ff4f"], ["#f8c600", "#feff94"]];
       this.createBoard();
     }
 
@@ -54,6 +56,47 @@ define(["View", "SimonButton", "Point", "jQuery"], function(View, SimonButton, P
       this.buttonDist = parseInt(Math.min(width, height) / 72);
       this.buttonWidth = parseInt(Math.min(width, height) / 3.5);
       return this.buttonDist = parseInt(Math.min(width, height) / 72);
+    };
+
+    GameView.prototype.drawBackground = function() {
+      var ctx, img;
+      ctx = this.board[0].getContext("2d");
+      img = $('<img src="resources//sofaBlue.jpg">')[0];
+      return ctx.drawImage(img, 0, 0, this.board.width(), this.board.height());
+    };
+
+    GameView.prototype.drawRedScreen = function(opacity) {
+      var ctx;
+      ctx = this.board[0].getContext("2d");
+      ctx.fillStyle = "rgba(255,0,0," + opacity + ")";
+      return ctx.fillRect(0, 0, this.board.width(), this.board.height());
+    };
+
+    GameView.prototype.draw = function() {
+      this.drawBackground();
+      return GameView.__super__.draw.apply(this, arguments);
+    };
+
+    GameView.prototype.drawFailScreen = function() {
+      var step, view;
+      this.draw();
+      this.drawRedScreen(0.5);
+      step = 0.2 * GameView.REDSCREENTIME;
+      view = this;
+      setTimeout(view.continueDrawingFailScreen(step, 0.4), step);
+      return GameView.REDSCREENTIME;
+    };
+
+    GameView.prototype.continueDrawingFailScreen = function(timeStep, opacity) {
+      var view;
+      this.draw();
+      this.drawRedScreen(opacity);
+      view = this;
+      if (opacity >= 0) {
+        return setTimeout((function() {
+          return view.continueDrawingFailScreen(timeStep, opacity - 0.1);
+        }), timeStep);
+      }
     };
 
     return GameView;

@@ -1,6 +1,7 @@
 define(["Level"], (Level) ->
     class GameManager
-        constructor: (simonButtons, @propertyChanged, @startedDisplaying, @finishedDisplaying) ->
+        @TIMETONEXTROUND: 500
+        constructor: (simonButtons, @propertyChanged, @startedDisplaying, @finishedDisplaying, @madeMistake) ->
             @_actualLevel = new Level simonButtons, 2, 1000, (=>this.propertyChanged()), =>this.levelFinishedDisplaying()
             @_actualMove = 0
         start: ->
@@ -16,8 +17,11 @@ define(["Level"], (Level) ->
                 if @_actualMove == @_actualLevel.getMovesCount()
                     button.turnOff()
                     @_actualLevel.addMove()
-                    this.start()
+                    gm = this
+                    setTimeout (->gm.start()), GameManager.TIMETONEXTROUND
             else
                 button.turnOff()
-                this.start()
+                waitTime = this.madeMistake()
+                gm = this
+                setTimeout (->gm.start()), waitTime + GameManager.TIMETONEXTROUND
 )
