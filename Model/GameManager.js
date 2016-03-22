@@ -3,11 +3,12 @@ define(["Level"], function(Level) {
   return GameManager = (function() {
     GameManager.TIMETONEXTROUND = 500;
 
-    function GameManager(simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake) {
+    function GameManager(simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, updateScore) {
       this.propertyChanged = propertyChanged;
       this.startedDisplaying = startedDisplaying;
       this.finishedDisplaying = finishedDisplaying;
       this.madeMistake = madeMistake;
+      this.updateScore = updateScore;
       this._actualLevel = new Level(simonButtons, 2, 1000, ((function(_this) {
         return function() {
           return _this.propertyChanged();
@@ -18,6 +19,7 @@ define(["Level"], function(Level) {
         };
       })(this));
       this._actualMove = 0;
+      this._points = 0;
     }
 
     GameManager.prototype.start = function() {
@@ -34,13 +36,11 @@ define(["Level"], function(Level) {
       var gm, waitTime;
       if (button.equals(this._actualLevel.getButton(this._actualMove))) {
         this._actualMove++;
-        if (this._actualMove === this._actualLevel.getMovesCount()) {
+        if (this.isEndOfLevel()) {
           button.turnOff();
-          this._actualLevel.addMove();
-          gm = this;
-          return setTimeout((function() {
-            return gm.start();
-          }), GameManager.TIMETONEXTROUND);
+          this.addPointsOfActualLevel();
+          console.log("Update punktow: " + this._points);
+          return this.startNewLevel();
         }
       } else {
         button.turnOff();
@@ -50,6 +50,28 @@ define(["Level"], function(Level) {
           return gm.start();
         }), waitTime + GameManager.TIMETONEXTROUND);
       }
+    };
+
+    GameManager.prototype.isEndOfLevel = function() {
+      return this._actualMove === this._actualLevel.getMovesCount();
+    };
+
+    GameManager.prototype.addPointsOfActualLevel = function() {
+      this._points += 100 * this._actualLevel.getMovesCount();
+      return this.updateScore();
+    };
+
+    GameManager.prototype.startNewLevel = function() {
+      var gm;
+      this._actualLevel.addMove();
+      gm = this;
+      return setTimeout((function() {
+        return gm.start();
+      }), GameManager.TIMETONEXTROUND);
+    };
+
+    GameManager.prototype.getPoints = function() {
+      return this._points;
     };
 
     return GameManager;

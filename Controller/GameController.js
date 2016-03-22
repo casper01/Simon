@@ -29,9 +29,13 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
         return function() {
           return _this.enableClicking();
         };
-      })(this)), (function(_this) {
+      })(this)), ((function(_this) {
         return function() {
           return _this.drawFailScreen();
+        };
+      })(this)), (function(_this) {
+        return function() {
+          return _this.updateScore();
         };
       })(this));
       this._gameManager.start();
@@ -95,6 +99,10 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
     GameController.prototype.drawFailScreen = function() {
       this.disableClicking();
       return this._gameView.drawFailScreen();
+    };
+
+    GameController.prototype.updateScore = function() {
+      return this._gameView.updateScore(this._gameManager.getPoints());
     };
 
     return GameController;

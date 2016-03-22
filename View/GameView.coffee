@@ -10,6 +10,7 @@ define(["View", "SimonButton", "Point", "jQuery"], (View, SimonButton, Point, $)
                             #   blue                    red                 green               yellow
             @buttonColors = [["blue", "#4f77ff"], ["red", "#ff9494"], ["green", "#57ff4f"], ["#f8c600", "#feff94"]]
             this.createBoard()
+            this.updateScore(0)
         adjustWindow: ->
             this.updateSettings()
         createBoard: ->
@@ -62,5 +63,7 @@ define(["View", "SimonButton", "Point", "jQuery"], (View, SimonButton, Point, $)
                 setTimeout (->
                     view.continueDrawingFailScreen(timeStep, opacity-0.1)
                 ), timeStep
+        updateScore: (newScore) ->
+            $("#points").text(newScore)
 )
             
