@@ -3,13 +3,26 @@ define(["Level"], function(Level) {
   return GameManager = (function() {
     GameManager.TIMETONEXTROUND = 500;
 
-    function GameManager(simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, updateScore) {
+    GameManager.INITLIVES = 2;
+
+    function GameManager(_simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, updateScore) {
+      this._simonButtons = _simonButtons;
       this.propertyChanged = propertyChanged;
       this.startedDisplaying = startedDisplaying;
       this.finishedDisplaying = finishedDisplaying;
       this.madeMistake = madeMistake;
       this.updateScore = updateScore;
-      this._actualLevel = new Level(simonButtons, 2, 1000, ((function(_this) {
+      this.reset();
+    }
+
+    GameManager.prototype.start = function() {
+      this._actualMove = 0;
+      this.startedDisplaying();
+      return this._actualLevel.displayAllMoves();
+    };
+
+    GameManager.prototype.reset = function() {
+      this._actualLevel = new Level(this._simonButtons, 2, 1000, ((function(_this) {
         return function() {
           return _this.propertyChanged();
         };
@@ -20,12 +33,7 @@ define(["Level"], function(Level) {
       })(this));
       this._actualMove = 0;
       this._points = 0;
-    }
-
-    GameManager.prototype.start = function() {
-      this._actualMove = 0;
-      this.startedDisplaying();
-      return this._actualLevel.displayAllMoves();
+      return this._lives = GameManager.INITLIVES;
     };
 
     GameManager.prototype.levelFinishedDisplaying = function() {
@@ -39,16 +47,19 @@ define(["Level"], function(Level) {
         if (this.isEndOfLevel()) {
           button.turnOff();
           this.addPointsOfActualLevel();
-          console.log("Update punktow: " + this._points);
           return this.startNewLevel();
         }
       } else {
         button.turnOff();
-        waitTime = this.madeMistake();
+        this._lives--;
         gm = this;
-        return setTimeout((function() {
+        setTimeout((function() {
           return gm.start();
         }), waitTime + GameManager.TIMETONEXTROUND);
+        if (this._lives === 0) {
+          this.reset();
+        }
+        return waitTime = this.madeMistake();
       }
     };
 
@@ -72,6 +83,10 @@ define(["Level"], function(Level) {
 
     GameManager.prototype.getPoints = function() {
       return this._points;
+    };
+
+    GameManager.prototype.getLives = function() {
+      return this._lives;
     };
 
     return GameManager;

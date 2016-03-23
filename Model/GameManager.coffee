@@ -1,14 +1,18 @@
 define(["Level"], (Level) ->
     class GameManager
         @TIMETONEXTROUND: 500
-        constructor: (simonButtons, @propertyChanged, @startedDisplaying, @finishedDisplaying, @madeMistake, @updateScore) ->
-            @_actualLevel = new Level simonButtons, 2, 1000, (=>this.propertyChanged()), =>this.levelFinishedDisplaying()
-            @_actualMove = 0
-            @_points = 0
+        @INITLIVES: 2
+        constructor: (@_simonButtons, @propertyChanged, @startedDisplaying, @finishedDisplaying, @madeMistake, @updateScore) ->
+            this.reset()
         start: ->
             @_actualMove = 0
             this.startedDisplaying()
             @_actualLevel.displayAllMoves()
+        reset: ->
+            @_actualLevel = new Level @_simonButtons, 2, 1000, (=>this.propertyChanged()), =>this.levelFinishedDisplaying()
+            @_actualMove = 0
+            @_points = 0
+            @_lives = GameManager.INITLIVES
         levelFinishedDisplaying: ->
             this.finishedDisplaying()
         buttonClicked: (button) ->
@@ -18,13 +22,16 @@ define(["Level"], (Level) ->
                 if this.isEndOfLevel()
                     button.turnOff()
                     this.addPointsOfActualLevel()
-                    console.log "Update punktow: " + @_points
                     this.startNewLevel()
             else
                 button.turnOff()
-                waitTime = this.madeMistake()
+                @_lives--
                 gm = this
                 setTimeout (->gm.start()), waitTime + GameManager.TIMETONEXTROUND
+                
+                if @_lives == 0
+                    this.reset()
+                waitTime = this.madeMistake()
         isEndOfLevel: -> @_actualMove == @_actualLevel.getMovesCount()
         addPointsOfActualLevel: ->
             @_points += 100 * @_actualLevel.getMovesCount()
@@ -34,4 +41,5 @@ define(["Level"], (Level) ->
             gm = this
             setTimeout (->gm.start()), GameManager.TIMETONEXTROUND
         getPoints: -> @_points
+        getLives: -> @_lives
 )

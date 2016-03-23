@@ -14,7 +14,6 @@ define(["View", "SimonButton", "Point", "jQuery"], function(View, SimonButton, P
       this.updateSettings();
       this.buttonColors = [["blue", "#4f77ff"], ["red", "#ff9494"], ["green", "#57ff4f"], ["#f8c600", "#feff94"]];
       this.createBoard();
-      this.updateScore(0);
     }
 
     GameView.prototype.adjustWindow = function() {
@@ -102,6 +101,10 @@ define(["View", "SimonButton", "Point", "jQuery"], function(View, SimonButton, P
 
     GameView.prototype.updateScore = function(newScore) {
       return $("#points").text(newScore);
+    };
+
+    GameView.prototype.updateLives = function(newLives) {
+      return $("#lives").text(newLives);
     };
 
     return GameView;

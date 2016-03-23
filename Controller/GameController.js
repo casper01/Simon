@@ -31,14 +31,15 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
         };
       })(this)), ((function(_this) {
         return function() {
-          return _this.drawFailScreen();
+          return _this.notifyPlayerMistake();
         };
       })(this)), (function(_this) {
         return function() {
-          return _this.updateScore();
+          return _this.updateGameInfo();
         };
       })(this));
       this._gameManager.start();
+      this.updateGameInfo();
     }
 
     GameController.prototype.mouseDown = function(e) {
@@ -96,13 +97,15 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       return this._enabledClicking = false;
     };
 
-    GameController.prototype.drawFailScreen = function() {
+    GameController.prototype.notifyPlayerMistake = function() {
       this.disableClicking();
-      return this._gameView.drawFailScreen();
+      this._gameView.drawFailScreen();
+      return this.updateGameInfo();
     };
 
-    GameController.prototype.updateScore = function() {
-      return this._gameView.updateScore(this._gameManager.getPoints());
+    GameController.prototype.updateGameInfo = function() {
+      this._gameView.updateScore(this._gameManager.getPoints());
+      return this._gameView.updateLives(this._gameManager.getLives());
     };
 
     return GameController;
