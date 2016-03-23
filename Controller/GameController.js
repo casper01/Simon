@@ -39,7 +39,7 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
         };
       })(this));
       this._gameManager.start();
-      this.updateGameInfo();
+      this.updateGameInfo(false);
     }
 
     GameController.prototype.mouseDown = function(e) {
@@ -103,9 +103,12 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       return this.updateGameInfo();
     };
 
-    GameController.prototype.updateGameInfo = function() {
-      this._gameView.updateScore(this._gameManager.getPoints());
-      return this._gameView.updateLives(this._gameManager.getLives());
+    GameController.prototype.updateGameInfo = function(blinking) {
+      if (blinking == null) {
+        blinking = true;
+      }
+      this._gameView.updateScore(this._gameManager.getPoints(), blinking);
+      return this._gameView.updateLives(this._gameManager.getLives(), blinking);
     };
 
     return GameController;

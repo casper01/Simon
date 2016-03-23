@@ -1,6 +1,6 @@
 # TODO: make compatible with View class
 
-define(["View", "SimonButton", "Point", "jQuery"], (View, SimonButton, Point, $) ->
+define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonButton, Point, $, TextBlinker) ->
     class GameView extends View
         @REDSCREENTIME: 200
         constructor: ->
@@ -10,6 +10,7 @@ define(["View", "SimonButton", "Point", "jQuery"], (View, SimonButton, Point, $)
                             #   blue                    red                 green               yellow
             @buttonColors = [["blue", "#4f77ff"], ["red", "#ff9494"], ["green", "#57ff4f"], ["#f8c600", "#feff94"]]
             this.createBoard()
+            
         adjustWindow: ->
             this.updateSettings()
         createBoard: ->
@@ -62,9 +63,27 @@ define(["View", "SimonButton", "Point", "jQuery"], (View, SimonButton, Point, $)
                 setTimeout (->
                     view.continueDrawingFailScreen(timeStep, opacity-0.1)
                 ), timeStep
-        updateScore: (newScore) ->
+        updateScore: (newScore, blinking = true) ->
+            oldPoints = $("#points").text()
             $("#points").text(newScore)
-        updateLives: (newLives) ->
+            
+            if !blinking
+                return
+            textBlinker = new TextBlinker $("#points")
+            if oldPoints < newScore
+                textBlinker.blinkGreen()
+            else if oldPoints > newScore
+                textBlinker.blinkRed()
+        updateLives: (newLives, blinking = true) ->
+            oldLives = $("#lives").text()
             $("#lives").text(newLives)
+            
+            if !blinking
+                return
+            textBlinker = new TextBlinker $("#lives")
+            if oldLives < newLives
+                textBlinker.blinkGreen()
+            else if oldLives > newLives
+                textBlinker.blinkRed()
 )
             

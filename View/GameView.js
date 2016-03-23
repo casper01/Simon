@@ -1,7 +1,7 @@
 var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-define(["View", "SimonButton", "Point", "jQuery"], function(View, SimonButton, Point, $) {
+define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View, SimonButton, Point, $, TextBlinker) {
   var GameView;
   return GameView = (function(superClass) {
     extend(GameView, superClass);
@@ -99,12 +99,40 @@ define(["View", "SimonButton", "Point", "jQuery"], function(View, SimonButton, P
       }
     };
 
-    GameView.prototype.updateScore = function(newScore) {
-      return $("#points").text(newScore);
+    GameView.prototype.updateScore = function(newScore, blinking) {
+      var oldPoints, textBlinker;
+      if (blinking == null) {
+        blinking = true;
+      }
+      oldPoints = $("#points").text();
+      $("#points").text(newScore);
+      if (!blinking) {
+        return;
+      }
+      textBlinker = new TextBlinker($("#points"));
+      if (oldPoints < newScore) {
+        return textBlinker.blinkGreen();
+      } else if (oldPoints > newScore) {
+        return textBlinker.blinkRed();
+      }
     };
 
-    GameView.prototype.updateLives = function(newLives) {
-      return $("#lives").text(newLives);
+    GameView.prototype.updateLives = function(newLives, blinking) {
+      var oldLives, textBlinker;
+      if (blinking == null) {
+        blinking = true;
+      }
+      oldLives = $("#lives").text();
+      $("#lives").text(newLives);
+      if (!blinking) {
+        return;
+      }
+      textBlinker = new TextBlinker($("#lives"));
+      if (oldLives < newLives) {
+        return textBlinker.blinkGreen();
+      } else if (oldLives > newLives) {
+        return textBlinker.blinkRed();
+      }
     };
 
     return GameView;

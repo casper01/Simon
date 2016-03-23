@@ -8,7 +8,8 @@ requirejs.config({
     GameManager: "Model/GameManager",
     GameView: "View/GameView",
     SimonButton: "View/SimonButton",
-    View: "View/View"
+    View: "View/View",
+    TextBlinker: "View/TextBlinker"
   },
   shim: {
     'jQuery': {

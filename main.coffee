@@ -1,6 +1,7 @@
 requirejs.config(
     baseUrl: "./"
     paths: 
+        # lib
         jQuery: "lib/jquery-2.2.0.min"
         # controller
         GameController: "Controller/GameController"
@@ -12,6 +13,7 @@ requirejs.config(
         GameView: "View/GameView"
         SimonButton: "View/SimonButton"
         View: "View/View"
+        TextBlinker: "View/TextBlinker"
      shim:
         'jQuery': exports: '$' # if someone use 'jQuery' name, use global '$' variable as module value
 )
