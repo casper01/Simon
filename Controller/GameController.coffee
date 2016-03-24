@@ -5,19 +5,15 @@ define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, Game
             @_gameView.adjustWindow()
             @_gameView.draw()
             controller = this
-            $(document).mousedown((e) ->
-                controller.mouseDown(e)
-            )
-            $(document).mouseup((e) ->
-                controller.mouseUp(e)
-            )
-            $(window).resize(() -> 
-                controller.onResize()
-            )
+            $(document).mousedown((e) -> controller.mouseDown(e))
+            $(document).mouseup((e) -> controller.mouseUp(e))
+            $(window).resize(() -> controller.onResize())
+            $("#buyLife").click (->controller.onBuyLifeClick())
             @_enabledClicking = true
             @_gameManager = new GameManager @_gameView.getObjects(), (=>this.update()), (=>this.disableClicking()), (=>this.enableClicking()), (=>this.notifyPlayerMistake()), =>this.updateGameInfo()
             @_gameManager.start()
             this.updateGameInfo false
+            @_gameView.updateLifeCost(@_gameManager.getLifePrice())
         mouseDown: (e) ->
             if !@_enabledClicking
                 return
@@ -45,8 +41,10 @@ define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, Game
             @_gameView.draw()
         enableClicking: ->
             @_enabledClicking = true
+            @_gameView.updateLifeCost()
         disableClicking: ->
             @_enabledClicking = false
+            @_gameView.disableBuyLifeButton()
         notifyPlayerMistake: ->
             this.disableClicking()
             @_gameView.drawFailScreen()
@@ -54,4 +52,10 @@ define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, Game
         updateGameInfo: (blinking = true) ->
             @_gameView.updateScore @_gameManager.getPoints(), blinking
             @_gameView.updateLives @_gameManager.getLives(), blinking
+        onBuyLifeClick: ->
+            @_gameManager.buyLife()
+            @_gameView.updateLifeCost(@_gameManager.getLifePrice())
+            this.updateGameInfo()
+            
+            @_gameManager.start()
 )

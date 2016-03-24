@@ -16,6 +16,9 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       $(window).resize(function() {
         return controller.onResize();
       });
+      $("#buyLife").click((function() {
+        return controller.onBuyLifeClick();
+      }));
       this._enabledClicking = true;
       this._gameManager = new GameManager(this._gameView.getObjects(), ((function(_this) {
         return function() {
@@ -40,6 +43,7 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       })(this));
       this._gameManager.start();
       this.updateGameInfo(false);
+      this._gameView.updateLifeCost(this._gameManager.getLifePrice());
     }
 
     GameController.prototype.mouseDown = function(e) {
@@ -90,11 +94,13 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
     };
 
     GameController.prototype.enableClicking = function() {
-      return this._enabledClicking = true;
+      this._enabledClicking = true;
+      return this._gameView.updateLifeCost();
     };
 
     GameController.prototype.disableClicking = function() {
-      return this._enabledClicking = false;
+      this._enabledClicking = false;
+      return this._gameView.disableBuyLifeButton();
     };
 
     GameController.prototype.notifyPlayerMistake = function() {
@@ -109,6 +115,13 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       }
       this._gameView.updateScore(this._gameManager.getPoints(), blinking);
       return this._gameView.updateLives(this._gameManager.getLives(), blinking);
+    };
+
+    GameController.prototype.onBuyLifeClick = function() {
+      this._gameManager.buyLife();
+      this._gameView.updateLifeCost(this._gameManager.getLifePrice());
+      this.updateGameInfo();
+      return this._gameManager.start();
     };
 
     return GameController;

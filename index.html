@@ -7,10 +7,17 @@
     </head>
     <body>
         <div id="menuBar">
-            <label class="menuLabel">Points: </label>
-            <label id="points" class="menuLabel"></label>
-            <label class="menuLabel">Lives: </label>
-            <label id="lives" class="menuLabel"></label>
+            <div style="display:table-cell">
+                <label class="menuLabel">Lives: </label>
+                <label id="lives" class="menuLabel"></label>
+            </div>
+            <div style="display:table-cell;text-align:center">
+                <label class="menuLabel">Points: </label>
+                <label id="points" class="menuLabel"></label>
+            </div>
+            <div style="display:table-cell;text-align:right">
+                <button id="buyLife" class="menuLabel"></button>
+            </div>
         </div>
         <canvas id="board">
         </canvas>

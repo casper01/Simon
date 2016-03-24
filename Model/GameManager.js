@@ -33,7 +33,8 @@ define(["Level"], function(Level) {
       })(this));
       this._actualMove = 0;
       this._points = 0;
-      return this._lives = GameManager.INITLIVES;
+      this._lives = GameManager.INITLIVES;
+      return this._lifePrice = this.getPointsOfActualLevel();
     };
 
     GameManager.prototype.levelFinishedDisplaying = function() {
@@ -67,8 +68,12 @@ define(["Level"], function(Level) {
       return this._actualMove === this._actualLevel.getMovesCount();
     };
 
+    GameManager.prototype.getPointsOfActualLevel = function() {
+      return 100 * this._actualLevel.getMovesCount();
+    };
+
     GameManager.prototype.addPointsOfActualLevel = function() {
-      this._points += 100 * this._actualLevel.getMovesCount();
+      this._points += this.getPointsOfActualLevel();
       return this.updateScore();
     };
 
@@ -87,6 +92,16 @@ define(["Level"], function(Level) {
 
     GameManager.prototype.getLives = function() {
       return this._lives;
+    };
+
+    GameManager.prototype.getLifePrice = function() {
+      return this._lifePrice;
+    };
+
+    GameManager.prototype.buyLife = function() {
+      this._lives++;
+      this._points -= this._lifePrice;
+      return this._lifePrice *= 2;
     };
 
     return GameManager;

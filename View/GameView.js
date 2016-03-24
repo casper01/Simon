@@ -111,10 +111,11 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
       }
       textBlinker = new TextBlinker($("#points"));
       if (oldPoints < newScore) {
-        return textBlinker.blinkGreen();
+        textBlinker.blinkGreen();
       } else if (oldPoints > newScore) {
-        return textBlinker.blinkRed();
+        textBlinker.blinkRed();
       }
+      return this.updateLifeCost();
     };
 
     GameView.prototype.updateLives = function(newLives, blinking) {
@@ -133,6 +134,29 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
       } else if (oldLives > newLives) {
         return textBlinker.blinkRed();
       }
+    };
+
+    GameView.prototype.updateLifeCost = function(newCost) {
+      if (newCost !== void 0) {
+        $("#buyLife").html('Buy life and replay for <span id="lifeCost">' + newCost + '</span> points');
+      } else {
+        newCost = parseInt($("#lifeCost").text());
+      }
+      console.log(newCost);
+      console.log($("#points").text());
+      if (newCost > parseInt($("#points").text())) {
+        return this.disableBuyLifeButton();
+      } else {
+        return this.enableBuyLifeButton();
+      }
+    };
+
+    GameView.prototype.disableBuyLifeButton = function() {
+      return $("#buyLife")[0].disabled = true;
+    };
+
+    GameView.prototype.enableBuyLifeButton = function() {
+      return $("#buyLife")[0].disabled = false;
     };
 
     return GameView;

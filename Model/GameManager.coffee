@@ -13,6 +13,7 @@ define(["Level"], (Level) ->
             @_actualMove = 0
             @_points = 0
             @_lives = GameManager.INITLIVES
+            @_lifePrice = this.getPointsOfActualLevel()
         levelFinishedDisplaying: ->
             this.finishedDisplaying()
         buttonClicked: (button) ->
@@ -33,8 +34,9 @@ define(["Level"], (Level) ->
                     this.reset()
                 waitTime = this.madeMistake()
         isEndOfLevel: -> @_actualMove == @_actualLevel.getMovesCount()
+        getPointsOfActualLevel: -> 100 * @_actualLevel.getMovesCount()
         addPointsOfActualLevel: ->
-            @_points += 100 * @_actualLevel.getMovesCount()
+            @_points += this.getPointsOfActualLevel()
             this.updateScore()
         startNewLevel: ->
             @_actualLevel.addMove()
@@ -42,4 +44,9 @@ define(["Level"], (Level) ->
             setTimeout (->gm.start()), GameManager.TIMETONEXTROUND
         getPoints: -> @_points
         getLives: -> @_lives
+        getLifePrice: -> @_lifePrice
+        buyLife: -> 
+            @_lives++
+            @_points -= @_lifePrice
+            @_lifePrice *= 2
 )

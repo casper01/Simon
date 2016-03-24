@@ -74,6 +74,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonBu
                 textBlinker.blinkGreen()
             else if oldPoints > newScore
                 textBlinker.blinkRed()
+            this.updateLifeCost()
         updateLives: (newLives, blinking = true) ->
             oldLives = $("#lives").text()
             $("#lives").text(newLives)
@@ -85,5 +86,21 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonBu
                 textBlinker.blinkGreen()
             else if oldLives > newLives
                 textBlinker.blinkRed()
+        updateLifeCost: (newCost) ->
+            if newCost != undefined
+                $("#buyLife").html('Buy life and replay for <span id="lifeCost">' + newCost + '</span> points')
+            else
+                newCost = parseInt $("#lifeCost").text()
+            console.log newCost
+            console.log  $("#points").text()
+            if newCost > parseInt $("#points").text()
+                this.disableBuyLifeButton()
+            else
+                this.enableBuyLifeButton()
+        disableBuyLifeButton: ->
+            $("#buyLife")[0].disabled = true
+        enableBuyLifeButton: ->
+            $("#buyLife")[0].disabled = false
+            
 )
             

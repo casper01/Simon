@@ -14,6 +14,8 @@
     width: 100%;
     background: black;
     z-index: 1;
+    display:table;
+    table-layout:fixed;
 }
 .menuLabel {
     display: inline-block;
@@ -22,4 +24,5 @@
     padding-top: .5em;
     padding-bottom: .5em;
     padding-left: .5em; 
+    background: transparent;
 }
