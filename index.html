@@ -6,17 +6,24 @@
         <script data-main="main" src="lib/require.js"></script>
     </head>
     <body>
-        <div id="menuBar">
+        <div class="menuBar">
             <div style="display:table-cell">
-                <label class="menuLabel">Lives: </label>
-                <label id="lives" class="menuLabel"></label>
+                <label class="menuLabel">Lives: <span id="lives"></span></label>
             </div>
             <div style="display:table-cell;text-align:center">
-                <label class="menuLabel">Points: </label>
-                <label id="points" class="menuLabel"></label>
+                <label class="menuLabel">Points: <span id="points"></span></label>
             </div>
             <div style="display:table-cell;text-align:right">
                 <button id="buyLife" class="menuLabel"></button>
+            </div>
+        </div>
+        <div id="bottomBar" class="menuBar">
+            <div></div>
+            <div style="display:table-cell;text-align:center">
+                <button id="startGame" class="menuLabel">Start</button>
+            </div>
+            <div style="display:table-cell;text-align:center">
+                <label id="bestScoreLabel" class="menuLabel" style="visibility:collapse">Best: <span id="bestScore"></span></label>
             </div>
         </div>
         <canvas id="board">

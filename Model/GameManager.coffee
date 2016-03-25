@@ -2,7 +2,7 @@ define(["Level"], (Level) ->
     class GameManager
         @TIMETONEXTROUND: 500
         @INITLIVES: 2
-        constructor: (@_simonButtons, @propertyChanged, @startedDisplaying, @finishedDisplaying, @madeMistake, @updateScore) ->
+        constructor: (@_simonButtons, @propertyChanged, @startedDisplaying, @finishedDisplaying, @madeMistake, @updateDataInfo, @finishGame) ->
             this.reset()
         start: ->
             @_actualMove = 0
@@ -28,16 +28,18 @@ define(["Level"], (Level) ->
                 button.turnOff()
                 @_lives--
                 gm = this
-                setTimeout (->gm.start()), waitTime + GameManager.TIMETONEXTROUND
-                
-                if @_lives == 0
-                    this.reset()
                 waitTime = this.madeMistake()
+                if @_lives == 0
+                    this.finishGame()
+                    this.reset()
+                    this.updateDataInfo()
+                    return
+                setTimeout (->gm.start()), waitTime + GameManager.TIMETONEXTROUND
         isEndOfLevel: -> @_actualMove == @_actualLevel.getMovesCount()
         getPointsOfActualLevel: -> 100 * @_actualLevel.getMovesCount()
         addPointsOfActualLevel: ->
             @_points += this.getPointsOfActualLevel()
-            this.updateScore()
+            this.updateDataInfo()
         startNewLevel: ->
             @_actualLevel.addMove()
             gm = this

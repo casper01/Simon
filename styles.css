@@ -9,7 +9,7 @@
     background: grey;
     z-index: -1;
 }
-#menuBar {
+.menuBar {
     position: absolute;
     width: 100%;
     background: black;
@@ -17,12 +17,16 @@
     display:table;
     table-layout:fixed;
 }
+#bottomBar {
+    bottom: 0;
+}
+
 .menuLabel {
     display: inline-block;
     color: white;
     font-weight: bold;
-    padding-top: .5em;
-    padding-bottom: .5em;
-    padding-left: .5em; 
+    padding: .5em;
+    /*padding-bottom: .5em;
+    padding-left: .5em; */
     background: transparent;
 }

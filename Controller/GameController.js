@@ -1,4 +1,4 @@
-define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Level, GameManager) {
+define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameView, $, Level, GameManager, Cookies) {
   var GameController;
   return GameController = (function() {
     function GameController() {
@@ -19,6 +19,9 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       $("#buyLife").click((function() {
         return controller.onBuyLifeClick();
       }));
+      $("#startGame").click(function() {
+        return controller.onStartGameClick();
+      });
       this._enabledClicking = true;
       this._gameManager = new GameManager(this._gameView.getObjects(), ((function(_this) {
         return function() {
@@ -36,14 +39,19 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
         return function() {
           return _this.notifyPlayerMistake();
         };
-      })(this)), (function(_this) {
+      })(this)), ((function(_this) {
         return function() {
           return _this.updateGameInfo();
         };
+      })(this)), (function(_this) {
+        return function() {
+          return _this.finishGame();
+        };
       })(this));
-      this._gameManager.start();
       this.updateGameInfo(false);
       this._gameView.updateLifeCost(this._gameManager.getLifePrice());
+      this.disableClicking();
+      this.updateBestScore();
     }
 
     GameController.prototype.mouseDown = function(e) {
@@ -122,6 +130,35 @@ define(["GameView", "jQuery", "Level", "GameManager"], function(GameView, $, Lev
       this._gameView.updateLifeCost(this._gameManager.getLifePrice());
       this.updateGameInfo();
       return this._gameManager.start();
+    };
+
+    GameController.prototype.onStartGameClick = function() {
+      this._gameView.switchToGameStartedMode();
+      return this._gameManager.start();
+    };
+
+    GameController.prototype.finishGame = function() {
+      this.updateBestScore(this._gameManager.getPoints());
+      return this._gameView.switchToGameFinishedMode();
+    };
+
+    GameController.prototype.updateBestScore = function(newScore) {
+      var bestScore;
+      bestScore = Cookies.get("bestScore");
+      if (newScore === void 0) {
+        this._gameView.updateBestScore(bestScore);
+        return;
+      }
+      if (bestScore === void 0) {
+        bestScore = -1;
+      } else {
+        bestScore = parseInt(bestScore);
+      }
+      if (bestScore < newScore) {
+        Cookies.set("bestScore", newScore);
+        console.log("new best score: " + newScore);
+        return this._gameView.updateBestScore(newScore);
+      }
     };
 
     return GameController;

@@ -37,7 +37,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonBu
             @buttonDist = parseInt (Math.min(width, height) / 72)
         drawBackground: ->
             ctx = @board[0].getContext("2d")
-            img = $('<img src="resources//sofaBlue.jpg">')[0]
+            img = $('<img src="resources//wallpaper.jpg">')[0]
             ctx.drawImage(img, 0, 0, @board.width(), @board.height());
         drawRedScreen: (opacity) ->
             ctx = @board[0].getContext("2d")
@@ -91,8 +91,6 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonBu
                 $("#buyLife").html('Buy life and replay for <span id="lifeCost">' + newCost + '</span> points')
             else
                 newCost = parseInt $("#lifeCost").text()
-            console.log newCost
-            console.log  $("#points").text()
             if newCost > parseInt $("#points").text()
                 this.disableBuyLifeButton()
             else
@@ -101,6 +99,13 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonBu
             $("#buyLife")[0].disabled = true
         enableBuyLifeButton: ->
             $("#buyLife")[0].disabled = false
-            
+        switchToGameStartedMode: ->
+            $("#startGame").css("visibility", "hidden")
+            $("#bestScoreLabel").css("visibility", "visible")
+        switchToGameFinishedMode: ->
+            $("#startGame").css("visibility", "visible")
+            $("#bestScoreLabel").css("visibility", "hidden")
+        updateBestScore: (bestScore) ->
+            $("#bestScore").text(bestScore)
 )
             

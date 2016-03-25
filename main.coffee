@@ -3,6 +3,7 @@ requirejs.config(
     paths: 
         # lib
         jQuery: "lib/jquery-2.2.0.min"
+        Cookies: "lib/js.cookie"
         # controller
         GameController: "Controller/GameController"
         # model

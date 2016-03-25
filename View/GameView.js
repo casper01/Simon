@@ -61,7 +61,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
     GameView.prototype.drawBackground = function() {
       var ctx, img;
       ctx = this.board[0].getContext("2d");
-      img = $('<img src="resources//sofaBlue.jpg">')[0];
+      img = $('<img src="resources//wallpaper.jpg">')[0];
       return ctx.drawImage(img, 0, 0, this.board.width(), this.board.height());
     };
 
@@ -142,8 +142,6 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
       } else {
         newCost = parseInt($("#lifeCost").text());
       }
-      console.log(newCost);
-      console.log($("#points").text());
       if (newCost > parseInt($("#points").text())) {
         return this.disableBuyLifeButton();
       } else {
@@ -157,6 +155,20 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
 
     GameView.prototype.enableBuyLifeButton = function() {
       return $("#buyLife")[0].disabled = false;
+    };
+
+    GameView.prototype.switchToGameStartedMode = function() {
+      $("#startGame").css("visibility", "hidden");
+      return $("#bestScoreLabel").css("visibility", "visible");
+    };
+
+    GameView.prototype.switchToGameFinishedMode = function() {
+      $("#startGame").css("visibility", "visible");
+      return $("#bestScoreLabel").css("visibility", "hidden");
+    };
+
+    GameView.prototype.updateBestScore = function(bestScore) {
+      return $("#bestScore").text(bestScore);
     };
 
     return GameView;

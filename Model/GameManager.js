@@ -5,13 +5,14 @@ define(["Level"], function(Level) {
 
     GameManager.INITLIVES = 2;
 
-    function GameManager(_simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, updateScore) {
+    function GameManager(_simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, updateDataInfo, finishGame) {
       this._simonButtons = _simonButtons;
       this.propertyChanged = propertyChanged;
       this.startedDisplaying = startedDisplaying;
       this.finishedDisplaying = finishedDisplaying;
       this.madeMistake = madeMistake;
-      this.updateScore = updateScore;
+      this.updateDataInfo = updateDataInfo;
+      this.finishGame = finishGame;
       this.reset();
     }
 
@@ -54,13 +55,16 @@ define(["Level"], function(Level) {
         button.turnOff();
         this._lives--;
         gm = this;
-        setTimeout((function() {
+        waitTime = this.madeMistake();
+        if (this._lives === 0) {
+          this.finishGame();
+          this.reset();
+          this.updateDataInfo();
+          return;
+        }
+        return setTimeout((function() {
           return gm.start();
         }), waitTime + GameManager.TIMETONEXTROUND);
-        if (this._lives === 0) {
-          this.reset();
-        }
-        return waitTime = this.madeMistake();
       }
     };
 
@@ -74,7 +78,7 @@ define(["Level"], function(Level) {
 
     GameManager.prototype.addPointsOfActualLevel = function() {
       this._points += this.getPointsOfActualLevel();
-      return this.updateScore();
+      return this.updateDataInfo();
     };
 
     GameManager.prototype.startNewLevel = function() {

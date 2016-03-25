@@ -1,4 +1,4 @@
-define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, GameManager) ->
+define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], (GameView, $, Level, GameManager, Cookies) ->
     class GameController
         constructor: ->
             @_gameView = new GameView
@@ -8,12 +8,14 @@ define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, Game
             $(document).mousedown((e) -> controller.mouseDown(e))
             $(document).mouseup((e) -> controller.mouseUp(e))
             $(window).resize(() -> controller.onResize())
-            $("#buyLife").click (->controller.onBuyLifeClick())
+            $("#buyLife").click (-> controller.onBuyLifeClick())
+            $("#startGame").click(-> controller.onStartGameClick())
             @_enabledClicking = true
-            @_gameManager = new GameManager @_gameView.getObjects(), (=>this.update()), (=>this.disableClicking()), (=>this.enableClicking()), (=>this.notifyPlayerMistake()), =>this.updateGameInfo()
-            @_gameManager.start()
+            @_gameManager = new GameManager @_gameView.getObjects(), (=>this.update()), (=>this.disableClicking()), (=>this.enableClicking()), (=>this.notifyPlayerMistake()), (=>this.updateGameInfo()), =>this.finishGame()
             this.updateGameInfo false
             @_gameView.updateLifeCost(@_gameManager.getLifePrice())
+            this.disableClicking()
+            this.updateBestScore()
         mouseDown: (e) ->
             if !@_enabledClicking
                 return
@@ -56,6 +58,26 @@ define(["GameView", "jQuery", "Level", "GameManager"], (GameView, $, Level, Game
             @_gameManager.buyLife()
             @_gameView.updateLifeCost(@_gameManager.getLifePrice())
             this.updateGameInfo()
-            
             @_gameManager.start()
+        onStartGameClick: ->
+            @_gameView.switchToGameStartedMode()
+            @_gameManager.start()
+        finishGame: ->
+            this.updateBestScore @_gameManager.getPoints()
+            @_gameView.switchToGameFinishedMode()
+        updateBestScore: (newScore) ->
+            bestScore = Cookies.get "bestScore"
+            
+            if newScore == undefined
+                @_gameView.updateBestScore bestScore
+                return
+            
+            if bestScore == undefined
+                bestScore = -1
+            else
+                bestScore = parseInt bestScore
+            if bestScore < newScore
+                Cookies.set "bestScore", newScore
+                console.log "new best score: " + newScore
+                @_gameView.updateBestScore newScore
 )
