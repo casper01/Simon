@@ -140,7 +140,8 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
     GameController.prototype.finishGame = function() {
       this.updateBestScore(this._gameManager.getPoints());
       this.disableClicking();
-      return this._gameView.switchToGameFinishedMode();
+      this._gameView.switchToGameFinishedMode();
+      return this._gameView.updateLifeCost(GameManager.INITTLIFEPRICE);
     };
 
     GameController.prototype.updateBestScore = function(newScore) {
@@ -156,7 +157,9 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
         bestScore = parseInt(bestScore);
       }
       if (bestScore < newScore) {
-        Cookies.set("bestScore", newScore);
+        Cookies.set("bestScore", newScore, {
+          expires: 365
+        });
         console.log("new best score: " + newScore);
         return this._gameView.updateBestScore(newScore);
       }

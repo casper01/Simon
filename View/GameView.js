@@ -12,7 +12,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
       GameView.__super__.constructor.call(this);
       this.board = $("#board");
       this.updateSettings();
-      this.buttonColors = [["blue", "#4f77ff"], ["red", "#ff9494"], ["green", "#57ff4f"], ["#f8c600", "#feff94"]];
+      this.buttonColors = [["rgba(0,0,255,.5)", "rgba(0,0,255,1)"], ["rgba(255,0,0,.5)", "rgba(255,0,0,1)"], ["rgba(0,255,0,.5)", "rgba(0,255,0,1)"], ["rgba(255,255,0,.5)", "rgba(255,255,0,1)"]];
       this.createBoard();
     }
 
@@ -26,7 +26,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
       results = [];
       for (ind in ref) {
         coord = ref[ind];
-        results.push(this._drawableObjects.push(new SimonButton(this.board, coord.x, coord.y, this.buttonWidth, this.buttonColors[ind][0], this.buttonColors[ind][1])));
+        results.push(this._drawableObjects.push(new SimonButton(this.board, coord.x, coord.y, this.buttonWidth, this.buttonColors[ind][1], this.buttonColors[ind][0])));
       }
       return results;
     };
@@ -79,7 +79,6 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
 
     GameView.prototype.drawFailScreen = function() {
       var step, view;
-      console.log("Red screen!");
       this.draw();
       this.drawRedScreen(0.5);
       step = 0.2 * GameView.REDSCREENTIME;

@@ -3,6 +3,8 @@ define(["Level"], function(Level) {
   return GameManager = (function() {
     GameManager.TIMETONEXTROUND = 500;
 
+    GameManager.INITTLIFEPRICE = 200;
+
     GameManager.INITLIVES = 2;
 
     function GameManager(_simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, updateDataInfo, finishGame) {
@@ -36,7 +38,7 @@ define(["Level"], function(Level) {
       this._actualMove = 0;
       this._points = 0;
       this._lives = GameManager.INITLIVES;
-      return this._lifePrice = this.getPointsOfActualLevel();
+      return this._lifePrice = GameManager.INITTLIFEPRICE;
     };
 
     GameManager.prototype.levelFinishedDisplaying = function() {
@@ -72,12 +74,8 @@ define(["Level"], function(Level) {
       return this._actualMove === this._actualLevel.getMovesCount();
     };
 
-    GameManager.prototype.getPointsOfActualLevel = function() {
-      return 100 * this._actualLevel.getMovesCount();
-    };
-
     GameManager.prototype.addPointsOfActualLevel = function() {
-      this._points += this.getPointsOfActualLevel();
+      this._points += 100 * this._actualLevel.getMovesCount();
       return this.updateDataInfo();
     };
 

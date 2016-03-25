@@ -56,7 +56,7 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], (GameView, $, 
             @_gameView.updateLives @_gameManager.getLives(), blinking
         onBuyLifeClick: ->
             @_gameManager.buyLife()
-            @_gameView.updateLifeCost(@_gameManager.getLifePrice())
+            @_gameView.updateLifeCost @_gameManager.getLifePrice()
             this.updateGameInfo()
             @_gameManager.start()
         onStartGameClick: ->
@@ -66,6 +66,7 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], (GameView, $, 
             this.updateBestScore @_gameManager.getPoints()
             this.disableClicking()
             @_gameView.switchToGameFinishedMode()
+            @_gameView.updateLifeCost GameManager.INITTLIFEPRICE
         updateBestScore: (newScore) ->
             bestScore = Cookies.get "bestScore"
             
@@ -78,7 +79,7 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], (GameView, $, 
             else
                 bestScore = parseInt bestScore
             if bestScore < newScore
-                Cookies.set "bestScore", newScore
+                Cookies.set "bestScore", newScore, { expires: 365 }
                 console.log "new best score: " + newScore
                 @_gameView.updateBestScore newScore
 )
