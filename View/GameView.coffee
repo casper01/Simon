@@ -10,7 +10,6 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonBu
                             #   blue                    red                 green               yellow
             @buttonColors = [["blue", "#4f77ff"], ["red", "#ff9494"], ["green", "#57ff4f"], ["#f8c600", "#feff94"]]
             this.createBoard()
-            
         adjustWindow: ->
             this.updateSettings()
         createBoard: ->
@@ -47,6 +46,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], (View, SimonBu
             this.drawBackground()
             super #, no po prostu świetnie.
         drawFailScreen: () ->
+            console.log "Red screen!"
             this.draw()
             this.drawRedScreen(0.5)
             step = 0.2 * GameView.REDSCREENTIME

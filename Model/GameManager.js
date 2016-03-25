@@ -18,6 +18,7 @@ define(["Level"], function(Level) {
 
     GameManager.prototype.start = function() {
       this._actualMove = 0;
+      this.updateDataInfo();
       this.startedDisplaying();
       return this._actualLevel.displayAllMoves();
     };
@@ -59,7 +60,6 @@ define(["Level"], function(Level) {
         if (this._lives === 0) {
           this.finishGame();
           this.reset();
-          this.updateDataInfo();
           return;
         }
         return setTimeout((function() {

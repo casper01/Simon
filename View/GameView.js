@@ -79,6 +79,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
 
     GameView.prototype.drawFailScreen = function() {
       var step, view;
+      console.log("Red screen!");
       this.draw();
       this.drawRedScreen(0.5);
       step = 0.2 * GameView.REDSCREENTIME;

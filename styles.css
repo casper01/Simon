@@ -1,12 +1,17 @@
 * {
     padding: 0;
     margin: 0;
+    font-family: sans-serif;
+}
+body {
+    background: url("resources//wallpaper.jpg");
+    background-size:cover;
 }
 #board {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: grey;
+    /*background: grey;*/
     z-index: -1;
 }
 .menuBar {

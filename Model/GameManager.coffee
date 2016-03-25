@@ -6,6 +6,7 @@ define(["Level"], (Level) ->
             this.reset()
         start: ->
             @_actualMove = 0
+            this.updateDataInfo()
             this.startedDisplaying()
             @_actualLevel.displayAllMoves()
         reset: ->
@@ -32,7 +33,6 @@ define(["Level"], (Level) ->
                 if @_lives == 0
                     this.finishGame()
                     this.reset()
-                    this.updateDataInfo()
                     return
                 setTimeout (->gm.start()), waitTime + GameManager.TIMETONEXTROUND
         isEndOfLevel: -> @_actualMove == @_actualLevel.getMovesCount()

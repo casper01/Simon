@@ -139,6 +139,7 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
 
     GameController.prototype.finishGame = function() {
       this.updateBestScore(this._gameManager.getPoints());
+      this.disableClicking();
       return this._gameView.switchToGameFinishedMode();
     };
 

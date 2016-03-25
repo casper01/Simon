@@ -64,6 +64,7 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], (GameView, $, 
             @_gameManager.start()
         finishGame: ->
             this.updateBestScore @_gameManager.getPoints()
+            this.disableClicking()
             @_gameView.switchToGameFinishedMode()
         updateBestScore: (newScore) ->
             bestScore = Cookies.get "bestScore"
