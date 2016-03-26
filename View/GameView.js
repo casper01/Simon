@@ -111,11 +111,10 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
       }
       textBlinker = new TextBlinker($("#points"));
       if (oldPoints < newScore) {
-        textBlinker.blinkGreen();
+        return textBlinker.blinkGreen();
       } else if (oldPoints > newScore) {
-        textBlinker.blinkRed();
+        return textBlinker.blinkRed();
       }
-      return this.updateLifeCost();
     };
 
     GameView.prototype.updateLives = function(newLives, blinking) {
@@ -137,16 +136,7 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
     };
 
     GameView.prototype.updateLifeCost = function(newCost) {
-      if (newCost !== void 0) {
-        $("#buyLife").html('Buy life and replay for <span id="lifeCost">' + newCost + '</span> points');
-      } else {
-        newCost = parseInt($("#lifeCost").text());
-      }
-      if (newCost > parseInt($("#points").text())) {
-        return this.disableBuyLifeButton();
-      } else {
-        return this.enableBuyLifeButton();
-      }
+      return $("#buyLife").html('Buy life and replay for <span id="lifeCost">' + newCost + '</span> points');
     };
 
     GameView.prototype.disableBuyLifeButton = function() {
@@ -164,11 +154,28 @@ define(["View", "SimonButton", "Point", "jQuery", "TextBlinker"], function(View,
 
     GameView.prototype.switchToGameFinishedMode = function() {
       $("#startGame").css("visibility", "visible");
-      return $("#bestScoreLabel").css("visibility", "hidden");
+      $("#bestScoreLabel").css("visibility", "hidden");
+      return this.disableBuyLifeButton();
     };
 
     GameView.prototype.updateBestScore = function(bestScore) {
       return $("#bestScore").text(bestScore);
+    };
+
+    GameView.prototype.getDocument = function() {
+      return $(document);
+    };
+
+    GameView.prototype.getWindow = function() {
+      return $(window);
+    };
+
+    GameView.prototype.getBuyLifeButton = function() {
+      return $("#buyLife");
+    };
+
+    GameView.prototype.getStartGameButton = function() {
+      return $("#startGame");
     };
 
     return GameView;

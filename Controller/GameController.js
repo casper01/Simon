@@ -7,19 +7,19 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
       this._gameView.adjustWindow();
       this._gameView.draw();
       controller = this;
-      $(document).mousedown(function(e) {
+      this._gameView.getDocument().mousedown(function(e) {
         return controller.mouseDown(e);
       });
-      $(document).mouseup(function(e) {
+      this._gameView.getDocument().mouseup(function(e) {
         return controller.mouseUp(e);
       });
-      $(window).resize(function() {
+      this._gameView.getWindow().resize(function() {
         return controller.onResize();
       });
-      $("#buyLife").click((function() {
+      this._gameView.getBuyLifeButton().click(function() {
         return controller.onBuyLifeClick();
-      }));
-      $("#startGame").click(function() {
+      });
+      this._gameView.getStartGameButton().click(function() {
         return controller.onStartGameClick();
       });
       this._enabledClicking = true;
@@ -38,10 +38,6 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
       })(this)), ((function(_this) {
         return function() {
           return _this.notifyPlayerMistake();
-        };
-      })(this)), ((function(_this) {
-        return function() {
-          return _this.updateGameInfo();
         };
       })(this)), (function(_this) {
         return function() {
@@ -98,12 +94,16 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
     };
 
     GameController.prototype.update = function() {
-      return this._gameView.draw();
+      this._gameView.draw();
+      this.updateGameInfo();
+      if (this._enabledClicking && this._gameManager.getLifePrice() <= this._gameManager.getPoints()) {
+        return this._gameView.enableBuyLifeButton();
+      }
     };
 
     GameController.prototype.enableClicking = function() {
       this._enabledClicking = true;
-      return this._gameView.updateLifeCost();
+      return this.update();
     };
 
     GameController.prototype.disableClicking = function() {
@@ -140,8 +140,8 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
     GameController.prototype.finishGame = function() {
       this.updateBestScore(this._gameManager.getPoints());
       this.disableClicking();
-      this._gameView.switchToGameFinishedMode();
-      return this._gameView.updateLifeCost(GameManager.INITTLIFEPRICE);
+      this._gameView.updateLifeCost(GameManager.INITTLIFEPRICE);
+      return this._gameView.switchToGameFinishedMode();
     };
 
     GameController.prototype.updateBestScore = function(newScore) {
@@ -160,7 +160,6 @@ define(["GameView", "jQuery", "Level", "GameManager", "Cookies"], function(GameV
         Cookies.set("bestScore", newScore, {
           expires: 365
         });
-        console.log("new best score: " + newScore);
         return this._gameView.updateBestScore(newScore);
       }
     };

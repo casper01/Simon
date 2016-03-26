@@ -7,20 +7,19 @@ define(["Level"], function(Level) {
 
     GameManager.INITLIVES = 2;
 
-    function GameManager(_simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, updateDataInfo, finishGame) {
+    function GameManager(_simonButtons, propertyChanged, startedDisplaying, finishedDisplaying, madeMistake, finishGame) {
       this._simonButtons = _simonButtons;
       this.propertyChanged = propertyChanged;
       this.startedDisplaying = startedDisplaying;
       this.finishedDisplaying = finishedDisplaying;
       this.madeMistake = madeMistake;
-      this.updateDataInfo = updateDataInfo;
       this.finishGame = finishGame;
       this.reset();
     }
 
     GameManager.prototype.start = function() {
       this._actualMove = 0;
-      this.updateDataInfo();
+      this.propertyChanged();
       this.startedDisplaying();
       return this._actualLevel.displayAllMoves();
     };
@@ -46,7 +45,7 @@ define(["Level"], function(Level) {
     };
 
     GameManager.prototype.buttonClicked = function(button) {
-      var gm, waitTime;
+      var gm;
       if (button.equals(this._actualLevel.getButton(this._actualMove))) {
         this._actualMove++;
         if (this.isEndOfLevel()) {
@@ -58,7 +57,7 @@ define(["Level"], function(Level) {
         button.turnOff();
         this._lives--;
         gm = this;
-        waitTime = this.madeMistake();
+        this.madeMistake();
         if (this._lives === 0) {
           this.finishGame();
           this.reset();
@@ -66,7 +65,7 @@ define(["Level"], function(Level) {
         }
         return setTimeout((function() {
           return gm.start();
-        }), waitTime + GameManager.TIMETONEXTROUND);
+        }), GameManager.TIMETONEXTROUND);
       }
     };
 
@@ -76,7 +75,7 @@ define(["Level"], function(Level) {
 
     GameManager.prototype.addPointsOfActualLevel = function() {
       this._points += 100 * this._actualLevel.getMovesCount();
-      return this.updateDataInfo();
+      return this.propertyChanged();
     };
 
     GameManager.prototype.startNewLevel = function() {
